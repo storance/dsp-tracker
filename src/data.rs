@@ -86,7 +86,7 @@ impl<T: Field> TryFrom<PageRequestRaw> for PageRequest<T> {
         let page = page_request
             .page
             .map(|page| {
-                u64::from_str_radix(&page, 10).map_err(|_| {
+                str::parse(&page).map_err(|_| {
                     TrackerError::invalid_field(
                         FieldValue::new("page", page),
                         AllowedValues::integer_min(Bound::inclusive(1)),
@@ -98,7 +98,7 @@ impl<T: Field> TryFrom<PageRequestRaw> for PageRequest<T> {
         let size = page_request
             .size
             .map(|size| {
-                u64::from_str_radix(&size, 10).map_err(|_| {
+                str::parse(&size).map_err(|_| {
                     TrackerError::invalid_field(
                         FieldValue::new("size", size),
                         AllowedValues::integer_min(Bound::inclusive(1)),
@@ -120,13 +120,13 @@ impl<T: Field> TryFrom<String> for Sort<T> {
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
         if let Some((field_raw, dir_raw)) = value.split_once(':') {
-            let field = T::from_str(&field_raw).map_err(|_| {
+            let field = T::from_str(field_raw).map_err(|_| {
                 TrackerError::invalid_field(
                     FieldValue::new("sort:field", field_raw),
                     AllowedValues::choice(T::values()),
                 )
             })?;
-            let dir = SortDirection::from_str(&dir_raw).map_err(|_| {
+            let dir = SortDirection::from_str(dir_raw).map_err(|_| {
                 TrackerError::invalid_field(
                     FieldValue::new("sort:direction", dir_raw),
                     AllowedValues::choice(SortDirection::iter()),

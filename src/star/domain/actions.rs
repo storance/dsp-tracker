@@ -26,9 +26,7 @@ pub async fn create<'a>(tx: &mut Transaction<'a, Postgres>, star: &Star) -> Resu
             Expr::current_timestamp().into(),
             star.version.into(),
             star.solar_system_id.into(),
-            Expr::val(star.spectral_class.as_ref())
-                .as_enum(Alias::new("spectral_class"))
-                .into(),
+            Expr::val(star.spectral_class.as_ref()).as_enum(Alias::new("spectral_class")),
             star.luminosity.into(),
             star.radius.into(),
         ])
@@ -52,9 +50,7 @@ pub async fn update<'a>(tx: &mut Transaction<'a, Postgres>, star: &Star) -> Resu
             (StarColumns::Version, Expr::col(StarColumns::Version).add(1)),
             (
                 StarColumns::SpectralClass,
-                Expr::val(star.spectral_class.as_ref())
-                    .as_enum(Alias::new("spectral_class"))
-                    .into(),
+                Expr::val(star.spectral_class.as_ref()).as_enum(Alias::new("spectral_class")),
             ),
             (StarColumns::Luminosity, star.luminosity.into()),
             (StarColumns::Radius, star.radius.into()),

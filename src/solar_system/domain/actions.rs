@@ -200,19 +200,16 @@ pub fn add_join_for_field(
     field: SolarSystemFields,
     joins_tracker: &mut Vec<String>,
 ) {
-    match field {
-        SolarSystemFields::Save(..) => {
-            let save_table = GameSaveColumns::Table.to_string();
-            if !joins_tracker.contains(&save_table) {
-                joins_tracker.push(save_table);
-                select_stmt.left_join(
-                    GameSaveColumns::Table,
-                    Expr::col((GameSaveColumns::Table, GameSaveColumns::Id))
-                        .equals((SolarSystemColumns::Table, SolarSystemColumns::SaveId)),
-                );
-            }
+    if let SolarSystemFields::Save(..) = field {
+        let save_table = GameSaveColumns::Table.to_string();
+        if !joins_tracker.contains(&save_table) {
+            joins_tracker.push(save_table);
+            select_stmt.left_join(
+                GameSaveColumns::Table,
+                Expr::col((GameSaveColumns::Table, GameSaveColumns::Id))
+                    .equals((SolarSystemColumns::Table, SolarSystemColumns::SaveId)),
+            );
         }
-        _ => {}
     }
 }
 

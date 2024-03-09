@@ -30,7 +30,7 @@ pub async fn create<'a>(tx: &mut Transaction<'a, Postgres>, save: &GameSave) -> 
     sqlx::query_with(&sql, values.clone())
         .execute(&mut **tx)
         .await
-        .map_err(|err| map_constraint_errors(err, &save))?;
+        .map_err(|err| map_constraint_errors(err, save))?;
 
     lookup(tx, save.id)
         .await

@@ -63,7 +63,7 @@ async fn search_handler(
 
     let response = domain::search(&mut transaction, save_id, &search_params)
         .await
-        .map(|r| r.map(|s| SolarSystem::from(s)))
+        .map(|r| r.map(SolarSystem::from))
         .inspect_err(|err| error!("Failed to search for solar systems: {}", err))?;
     transaction.commit().await?;
     Ok(response)

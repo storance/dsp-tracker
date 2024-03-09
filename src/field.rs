@@ -473,7 +473,8 @@ macro_rules! field_names {
 
             fn values() -> impl Iterator<Item = Self> {
                 static VALUES: once_cell::sync::Lazy<Vec<$type_name>> = once_cell::sync::Lazy::new(|| {
-                    let mut values = Vec::new();
+                    let capacity = field_names!(@values_size [$( ( $( $sub_field_type )? ) ),+]);
+                    let mut values = Vec::with_capacity(capacity);
                     $(
                         field_names!(@append_values(values, $type_name) $variant_name($( $sub_field_type )?));
                     )+
@@ -574,6 +575,30 @@ macro_rules! field_names {
         }
     ) => {
         $field.column()
+    };
+
+    (
+        @values_size [()]
+    ) => {
+        1
+    };
+
+    (
+        @values_size [($sub_field_type:ty) ]
+    ) => {
+        <sub_field_type>::values().count()
+    };
+
+    (
+        @values_size [(), $( ( $( $rest_sub_field_type:ty )? ) ),+]
+    ) => {
+        1 + field_names!(@values_size [$( ( $( $rest_sub_field_type )? ) ) ,*])
+    };
+
+    (
+        @values_size [($sub_field_type:ty), $( ( $( $rest_sub_field_type:ty )? ) ),+]
+    ) => {
+        <$sub_field_type>::values().count() + field_names!(@values_size [$( ( $( $rest_sub_field_type )? ) ) ,*])
     };
 
     (

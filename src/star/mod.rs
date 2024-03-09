@@ -1,5 +1,5 @@
-pub mod domain;
 pub mod api;
+pub mod domain;
 
 use serde::{Deserialize, Serialize};
 use strum::{AsRefStr, EnumIter};
@@ -25,5 +25,5 @@ pub enum SpectralClass {
     Neutron,
 }
 
-pub use domain::*;
 pub use api::config;
+pub use domain::*;

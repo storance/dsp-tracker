@@ -36,7 +36,7 @@ async fn main() -> std::io::Result<()> {
     let conn_str = std::env::var("DATABASE_URL").expect("Env var DATABASE_URL is required.");
     let cors_permissive = std::env::var("CORS_PERMISSIVE").map_or(false, |v| v.eq("true"));
     let listen_port = std::env::var("LISTEN_PORT").map_or(DEFAULT_LISTEN_PORT, |v| {
-        u16::from_str_radix(&v, 10).expect("Env var LISTEN_PORT is invalid")
+        str::parse(&v).expect("Env var LISTEN_PORT is invalid")
     });
     let pool = PgPoolOptions::new()
         .max_connections(10)
