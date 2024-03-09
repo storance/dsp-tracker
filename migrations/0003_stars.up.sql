@@ -20,13 +20,13 @@ CREATE TABLE stars (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE,
     version INTEGER NOT NULL,
-    solar_system_id UUID NOT NULL REFERENCES solar_systems(id),
+    solar_system_id UUID NOT NULL REFERENCES solar_systems(id) ON DELETE CASCADE,
     spectral_class spectral_class NOT NULL,
     luminosity REAL NOT NULL,
     radius REAL NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT positive_version CHECK (version >= 0),
     CONSTRAINT positive_luminosity CHECK (luminosity > 0.0),
-    CONSTRAINT positive_radius CHECK (version > 0.0),
+    CONSTRAINT positive_radius CHECK (radius > 0.0),
     UNIQUE (solar_system_id)
 );

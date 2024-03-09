@@ -9,7 +9,7 @@ mod utils;
 
 use actix_cors::Cors;
 use actix_web::middleware::Logger;
-use actix_web::{http::header, web, App, HttpServer};
+use actix_web::{web, App, HttpServer};
 use dotenvy::dotenv;
 use error::TrackerError;
 use sqlx::postgres::{PgPool, PgPoolOptions};
@@ -23,7 +23,8 @@ pub struct AppState {
 fn config(cfg: &mut web::ServiceConfig) {
     let scope = web::scope("/api/1")
         .configure(game_save::config)
-        .configure(solar_system::config);
+        .configure(solar_system::config)
+        .configure(star::config);
     cfg.service(scope);
 }
 
