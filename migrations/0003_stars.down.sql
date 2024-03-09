@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS stars;
+DROP TYPE IF EXISTS spectral_class;
